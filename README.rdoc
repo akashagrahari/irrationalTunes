@@ -1,28 +1,15 @@
-== README
+== Irrational Tunes
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+To get started install rails and postgresql on your system.
 
-Things you may want to cover:
+A [link](https://gorails.com/setup/osx/10.11-el-capitan) like this would help. Also, install bundler.
 
-* Ruby version
+Do a `bundle install` on the root directory. Then do `rake db:create` and `rake db:migrate`
 
-* System dependencies
+run `rails s` on root and go to http://localhost:3000 go to the application
 
-* Configuration
+* Ruby version - 2.2.4
 
-* Database creation
+It's a fairly simple application, involving a fairly simple setup procedure.
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+In case of any issues, create an issue in the repo. For feedback/questions, drop me a tweet on [twitter](https://twitter.com/AA_isnowonline)
