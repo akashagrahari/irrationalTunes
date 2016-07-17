@@ -1,0 +1,126 @@
+<% require 'bigdecimal/math' %>
+var irrNo,
+    tempo,
+    isPlaying = false,
+    cursor = 0,
+    pause,
+    velocity = 127,
+    delay = 0,
+    isSet=false,
+    scaleFormula,
+    intervals,
+    rootNote,
+    noteArray,
+    octave;
+
+function hideIntro(){
+  $('#intro').hide();
+}
+
+function playToggle() {
+  if(!isSet){
+    return;
+  }
+  hideElements('number');
+  isPlaying = !isPlaying;
+  if(!isPlaying){
+    pause.removeClass('hidden');
+  }
+  else{
+    pause.addClass('hidden');
+  }
+  var textBox = $('#digits'),
+      length = irrNo.length;
+  tempo = parseInt(tempo);
+  typeIt();
+
+  function playNote(note,factor) {
+    textBox.val(textBox.val()+irrNo[cursor++]);
+    MIDI.noteOn(0, note, velocity, delay);
+    MIDI.noteOff(0, note, delay + (0.3*factor*(180/40)));
+  }
+
+  function typeIt() {
+    if(cursor > length || !isPlaying) return;
+    if(cursor == 0){
+      playNote(parseInt(noteArray[irrNo[cursor]])+octave,2);
+    }
+    else if(cursor == 1){
+      cursor++;
+    }
+    else if(cursor == 2){
+      textBox.val(textBox.val()+'.');
+      playNote(parseInt(noteArray[irrNo[cursor]])+octave,1);
+    }
+    else{
+      playNote(parseInt(noteArray[irrNo[cursor]])+octave,1);
+    }
+    setTimeout(typeIt, ~~((60/tempo)*1000));
+//    sleepFor((60/tempo)*1000).then(() => {
+//      typeIt();
+//  })
+  }
+}
+
+function hideElements(className) {
+  var numberList = document.getElementsByClassName(className);
+  for(var n in numberList){
+    numberList[n].className= className+" hidden";
+  }
+}
+
+function getNoteArray(intervals) {
+  var array = [parseInt(rootNote)];
+  for(var i=0; i<9; i++){
+    array.push(parseInt(array[i])+parseInt(intervals[i%intervals.length]));
+  }
+  return array;
+}
+
+function refresh(){
+  pause = $('#pause');
+  isSet = true;
+  cursor = 0;
+  isPlaying = false;
+  if(!pause.hasClass('hidden')){
+    pause.addClass('hidden');
+  }
+  tempo = document.getElementById('tempo').value;
+  scaleFormula = document.getElementById('scale').value;
+  rootNote = document.getElementById('root-note').value;
+  octave = 32+(12*parseInt(document.getElementById('octave').value));
+  var number = document.getElementById('number').value,
+      textBox = $('#digits');
+  //        autoPlay = document.getElementById('auto-playToggle').checked;
+  textBox.val('');
+  refreshControlNumber(number);
+  switch(parseInt(number)){
+    case 1:
+      irrNo = '<%= (BigMath::PI(1000)).to_s %>';
+      break;
+    case 2:
+      irrNo = '<%= (BigMath::E(1000)).to_s %>';
+      break;
+    case 3:
+      irrNo = '<%= BigDecimal.new('2').sqrt(1000).to_s %>';
+      break;
+    case 4:
+      irrNo = '<%= ((BigMath::PI(1000))*2).to_s %>';
+      break;
+    default:
+      alert("Something Went Wrong! \nWe are working on it");
+  }
+  intervals = scaleFormula.split('').map(function(item) {
+    return parseInt(item, 10);
+  });
+  noteArray = getNoteArray(intervals);
+}
+
+function refreshControlNumber(number){
+  hideElements('number');
+  document.getElementById('control-'+number).className="control number";
+}
+
+//function sleepFor(duration){
+//  return new Promise((resolve) => setTimeout(resolve, duration))
+//}

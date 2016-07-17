@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+  <title>IrrationalTunes</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <div class="container-fluid">
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-header">
+        <%= link_to 'Irrational Tunes', {:controller => 'index' , :action => 'home'}, class: 'navbar-brand' %>
+      </div>
+      <ul class="nav navbar-nav navbar-right">
+        <li><%= link_to 'About', {:controller => 'info' , :action => 'about'}, :class => 'info-links', :id => 'about' %></li>
+        <li><%= link_to 'Support', {:controller => 'info' , :action => 'support'}, :class => 'info-links', :id => 'support'%></li>
+        <li>&nbsp;&nbsp;</li>
+      </ul>
+    </nav>
+  </div>
+  <div id="bg">
+    <%= yield %>
+    </div>
+
+
+</body>
+<script>
+
+    window.onload = function() {
+      MIDI.loadPlugin({
+        instrument: "acoustic_grand_piano",
+        onprogress: function(state, progress) {
+          console.log(state, progress);
+        },
+        onsuccess: function() {
+          MIDI.setVolume(0, 127);
+        }
+      });
+      var textbox=document.getElementById('digits');
+      textbox.addEventListener('mousewheel', function(e) {
+        e.preventDefault();
+      });
+      textbox.addEventListener('scroll', function(e) {
+        e.preventDefault();
+      });
+      textbox.addEventListener('wheel', function(e) {
+        e.preventDefault();
+      });
+    };
+    $('.info-links').click(function() {
+      if(isPlaying){
+        isPlaying=!isPlaying;
+        irrNo='';
+      }
+    })
+
+</script>
+</html>

@@ -1,0 +1,51 @@
+<div class="modal-footer" id="footer" onclick="hideIntro()">
+  <div class="left">
+    <div class="row">
+      <select class="form-control footer-list" id="number">
+        <option selected="true" disabled>Irrational Number</option>
+        <% for number in @numbers %>
+            <option value="<%= number.id %>"><%= raw(number.character) %> - <%=number.name %></option>
+        <% end %>
+      </select>
+      <select class="form-control footer-list" id="root-note">
+        <option selected="true" disabled>Root Notes</option>
+        <% for note in @notes %>
+            <option value="<%= note.id %>"><%= note.note%><%=raw(note.qualifier) %></option>
+        <% end %>
+      </select>
+      <select class="form-control footer-list" id="scale">
+        <option selected="true" disabled>Scales</option>
+        <% for scale in @scales %>
+            <option value="<%= scale.formula %>"><%= scale.name %></option>
+        <% end %>
+      </select>
+      <span class="form-control footer-list tempo"><input type="number" placeholder="Tempo" id="tempo" value="<%= @tempo%>"  min="40" max="180" step="5" style="background-color: inherit;">BPM</span>
+
+      <select class="form-control footer-list" id="octave">
+        <option selected="true" disabled>Octave</option>
+        <% for i in 1..5 %>
+            <option value="<%= i %>"><%= i %></option>
+        <% end %>
+      </select>
+      <!--<label>-->
+        <!--<input type="checkbox" id="auto-playToggle"> Auto Play&nbsp;&nbsp;-->
+      <!--</label>-->
+      <!--<label>-->
+        <!--<input type="checkbox" id="count-in"> Count In&nbsp;&nbsp;-->
+      <!--</label>-->
+      <input class="btn btn-default" type="button" value="Refresh" id="refresh" onclick="refresh()">&nbsp;&nbsp;
+    </div>
+  </div>
+</div>
+    <!--$(document).on("click","#refresh",function(){-->
+    <!--refresh();-->
+    <!--});-->
+
+    <!--$(document).on("click","#footer",function(){-->
+    <!--hideIntro();-->
+    <!--});-->
+    <!--};-->
+
+<!--<script type="application/javascript">-->
+  <!---->
+<!--</script>-->
