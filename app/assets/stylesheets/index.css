@@ -154,7 +154,7 @@ body {
     vertical-align: middle;
     font-size: 40px;
     color:gray;
-    font-family: Courier, Courier New, monospace;
+    font-family: inherit;
 }
 
 .about-message{
