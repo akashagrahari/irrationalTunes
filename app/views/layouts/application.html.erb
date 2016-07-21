@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html">
 <head>
-  <title>IrrationalTunes</title>
+  <title>Irrational Tunes</title>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body>
+<body style="background-color: #333;">
   <div class="container-fluid">
       <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-header">
@@ -19,9 +19,8 @@
       </ul>
     </nav>
   </div>
-  <div id="bg">
     <%= yield %>
-    </div>
+
 
 
 </body>
