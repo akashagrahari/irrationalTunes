@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<head>
+  <% include partials/player %>
+</head>
+<body style="background-color: #333;">
+    <div class="container-fluid">
+      <div class="row navbar navbar-inverse navbar-fixed-top" onclick="hideIntro()">
+        <select class="form-control footer-list play-dock" id="select-number">
+          <option selected="true" disabled>Irrational Numbers</option>
+              <option value="pi">Pi - &pi;</option>
+              <option value="euler">Euler's Number - e</option>
+              <option value="root_two">Square root of 2 - &#8730;2</option>
+              <option value="tau">Tau - &tau;</option>
+              
+        </select>
+        <select class="form-control footer-list play-dock" id="root-note">
+          <option selected="true" disabled>Root Notes</option>
+              <option value="A">A</option>
+              <option value="A#">B&#9837;</option>
+              <option value="B">B</option>
+              <option value="C">C</option>
+              <option value="C#">C#</option>
+              <option value="D">D</option>
+              <option value="D#">E&#9837;</option>
+              <option value="E">E</option>
+              <option value="F">F</option>
+              <option value="F#">F#</option>
+              <option value="G">G</option>
+              <option value="G#">G#</option>
+        </select>
+        <select class="form-control footer-list play-dock" id="scale">
+          <option selected="true" disabled>Scales</option>
+              <option value="2212221">Major</option>
+              <option value="2122122">Natural Minor</option>
+              <option value="2122131">Harmonic Minor</option>
+              <option value="32232">Minor Pentatonic</option>
+        </select>
+        <span class="form-control footer-list tempo play-dock"><input type="number" placeholder="Tempo" id="tempo" value="80"  min="80" max="180" step="5" style="background-color: inherit;">BPM</span>
+  
+        <select class="form-control footer-list play-dock" id="octave">
+          <option selected="true" disabled>Octave</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+        </select>
+        <input class="btn btn-default play-dock refresh-btn" type="button" value="Refresh" id="refresh" onclick="refresh()">&nbsp;&nbsp;
+        </div>
+    </div>
+    <div >
+        <div class="digits">
+            <input type="text" id="digits" disabled autocomplete="off">
+        </div>
+        <div class="col-md-4 block control" onclick="playToggle()">
+            <!-- <p class="controls hidden" id="play">&#9658;</p> -->
+            <p class="controls hidden" id="pause">&#10074;&#10074;</p>
+            <p class="stage-number hidden" id="control-pi">&pi;&#9658;</p>
+            <p class="stage-number hidden" id="control-euler">e&#9658;</p>
+            <p class="stage-number hidden" style="font:50%;" id="control-root_two">&#8730;2&#9658;</p>
+            <p class="stage-number hidden" id="control-tau">&tau;&#9658;</p>
+            <p class="intro" id="intro">START ABOVE</p>
+        </div>
+    </div>
+    
+</body>

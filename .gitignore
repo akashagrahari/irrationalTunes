@@ -8,12 +8,4 @@
 /.bundle
 
 # Ignore all logfiles and tempfiles.
-/log/*
-!/log/.keep
-/tmp
-.idea
-.DS_Store
-public/.DS_Store
-.env
-public
-Gemfile.lock
+node_modules
