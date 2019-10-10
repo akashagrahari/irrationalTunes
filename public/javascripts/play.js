@@ -27,6 +27,7 @@ function initializeVars() {
     delay = 0;
     isSet=false;
     scaleFormula = $('#scale');
+    irrNo = '';
     // intervals,
     rootNote = $('#root-note');
     // noteArray,
@@ -54,12 +55,8 @@ function resetStage() {
     stage.val('');
 }
 
-function hideElementsByClassName(className) {
-    $("." + className).hide();
-  }
-
 function refreshControlNumber(selectNumberVal){
-    hideElementsByClassName('stage-number');
+    $('.stage-number').hide();
     console.log("#control-"+selectNumberVal);
     $("#control-"+selectNumberVal).removeClass("hidden");
     $("#control-"+selectNumberVal).show();
@@ -79,13 +76,6 @@ function refresh(){
     isPlaying = false;
     resetControlIcons();
     resetStage();
-    // pause = $('#pause');
-    // isSet = true;
-    // cursor = 0;
-    // isPlaying = false;
-    // if(!pause.hasClass('hidden')){
-    //     pause.addClass('hidden');
-    //   }
     tempoVal = tempo.val();
     scaleFormulaVal = scaleFormula.val();
     rootNoteVal = rootNote.val();
@@ -95,32 +85,9 @@ function refresh(){
     loadJSON(selectNumberVal, function(response) {
         var jsonData = JSON.parse(response);
         irrNo = jsonData.value;
-
+        console.log("selected irrational number = " + selectNumberVal);
+        console.log("selected irrational number value = " + irrNo);
     });
-    // switch(selectNumberVal){
-    //     case "pi":
-    //       loadJSON(selectNumberVal, function(response) {
-    //           var jsonData = JSON.parse(response);
-    //           irrNo = jsonData.value;
-    
-    //       });
-    //     case "euler":
-            
-    // //     break;
-    // //   case 2:
-    // //     irrNo = '<%= (BigMath::E(1000)).to_s %>';
-    // //     break;
-    // //   case 3:
-    // //     irrNo = '<%= BigDecimal.new('2').sqrt(1000).to_s %>';
-    // //     break;
-    // //   case 4:
-    // //     irrNo = '<%= ((BigMath::PI(1000))*2).to_s %>';
-    // //     break;
-    // //   default:
-    // //     alert("Something Went Wrong! \nWe are working on it");
-    // }
-    console.log("selected irrational number = " + selectNumberVal);
-    console.log("selected irrational number value = " + irrNo);
     intervals = scaleFormula.val().split('').map(function(item) {
       return parseInt(item, 10);
     });
@@ -131,41 +98,56 @@ function refresh(){
 
 function playToggle() {
     isPlaying = !isPlaying;
-    hideElementsByClassName('stage-number');
+    $('.stage-number').hide();
     if(!isPlaying){
-      pause.removeClass('hidden');
+        pause.removeClass('hidden');
+        pause.show();
     }
     else{
-      pause.addClass('hidden');
+    
+        pause.hide();
     }
     length = irrNo.length;
     tempoVal = parseInt(tempo.val());
     typeIt();
   
-    function playNote(note) {
+    function playNote(note, callback) {
       textBox.val(textBox.val()+irrNo[cursor]);
       sfPromise.then(function(instrument){
           if(!isNaN(irrNo[cursor])) {
+              console.log("true");
+              console.log(note);
             instrument.play(note);
+          } else {
+            console.log("false");
+            console.log(irrNo[cursor]);
+            console.log(cursor);
+            console.log(note);
           }
+          callback();
         });
-        cursor++;
     }
   
     function typeIt() {
       if(cursor > length || !isPlaying) return;
       if(cursor == 0){
-        playNote(noteArray[irrNo[cursor]]+octave.val());
+        playNote(noteArray[irrNo[cursor]]+octave.val(), function() {
+            cursor++;
+        });
       }
       else if(cursor == 1){
         cursor++;
       }
       else if(cursor == 2){
         textBox.val(textBox.val()+'.');
-        playNote(noteArray[irrNo[cursor]]+octave.val());
+        playNote(noteArray[irrNo[cursor]]+octave.val(), function() {
+            cursor++;
+        });
       }
       else{
-        playNote(noteArray[irrNo[cursor]]+octave.val());
+        playNote(noteArray[irrNo[cursor]]+octave.val(), function() {
+            cursor++;
+        });
       }
       setTimeout(typeIt, ((60/tempoVal)*1000));
     }
