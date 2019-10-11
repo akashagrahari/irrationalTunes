@@ -12,7 +12,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
         Soundfont = require('soundfont-player');
         ac = new AudioContext();
         sfPromise = Soundfont.instrument(ac, 'acoustic_grand_piano', { gain: 4 });
-        initializeVars();  
+        initializeVars();
+
     });
 });
 
@@ -38,11 +39,19 @@ function initializeVars() {
     textBox = $('#digits');
     sfPromise.then(function(instrument){
         instrument.play('D4');
+    }, function(err) {
+      console.log(err);
+      alert("You will need to disable adblock to use this app. This site has no ads. It's just a case of false positive.");
     });
 }
 
 
 function hideIntro(){
+    ac.resume().then(() => {
+      console.log('Playback resumed successfully');
+    }, () => {
+      alert('Failed to initialize audio context. Please reload.');
+    });
     $('#intro').hide();
 }
 
@@ -73,6 +82,7 @@ function getNoteArray(intervals) {
 }
 
 function refresh(){
+    isSet = true;
     isPlaying = false;
     resetControlIcons();
     resetStage();
@@ -97,58 +107,60 @@ function refresh(){
 }
 
 function playToggle() {
-    isPlaying = !isPlaying;
-    $('.stage-number').hide();
-    if(!isPlaying){
-        pause.removeClass('hidden');
-        pause.show();
+  if (!isSet) {
+    return;
+  }
+  isPlaying = !isPlaying;
+  $('.stage-number').hide();
+  if(!isPlaying){
+      pause.removeClass('hidden');
+      pause.show();
+  }
+  else{
+      pause.hide();
+  }
+  length = irrNo.length;
+  tempoVal = parseInt(tempo.val());
+  typeIt();
+
+  function playNote(note, callback) {
+    textBox.val(textBox.val()+irrNo[cursor]);
+    sfPromise.then(function(instrument){
+        if(!isNaN(irrNo[cursor])) {
+            console.log("true");
+            console.log(note);
+          instrument.play(note);
+        } else {
+          console.log("false");
+          console.log(irrNo[cursor]);
+          console.log(cursor);
+          console.log(note);
+        }
+        callback();
+      });
+  }
+
+  function typeIt() {
+    if(cursor > length || !isPlaying) return;
+    if(cursor == 0){
+      playNote(noteArray[irrNo[cursor]]+octave.val(), function() {
+          cursor++;
+      });
+    }
+    else if(cursor == 1){
+      cursor++;
+    }
+    else if(cursor == 2){
+      textBox.val(textBox.val()+'.');
+      playNote(noteArray[irrNo[cursor]]+octave.val(), function() {
+          cursor++;
+      });
     }
     else{
-    
-        pause.hide();
+      playNote(noteArray[irrNo[cursor]]+octave.val(), function() {
+          cursor++;
+      });
     }
-    length = irrNo.length;
-    tempoVal = parseInt(tempo.val());
-    typeIt();
-  
-    function playNote(note, callback) {
-      textBox.val(textBox.val()+irrNo[cursor]);
-      sfPromise.then(function(instrument){
-          if(!isNaN(irrNo[cursor])) {
-              console.log("true");
-              console.log(note);
-            instrument.play(note);
-          } else {
-            console.log("false");
-            console.log(irrNo[cursor]);
-            console.log(cursor);
-            console.log(note);
-          }
-          callback();
-        });
-    }
-  
-    function typeIt() {
-      if(cursor > length || !isPlaying) return;
-      if(cursor == 0){
-        playNote(noteArray[irrNo[cursor]]+octave.val(), function() {
-            cursor++;
-        });
-      }
-      else if(cursor == 1){
-        cursor++;
-      }
-      else if(cursor == 2){
-        textBox.val(textBox.val()+'.');
-        playNote(noteArray[irrNo[cursor]]+octave.val(), function() {
-            cursor++;
-        });
-      }
-      else{
-        playNote(noteArray[irrNo[cursor]]+octave.val(), function() {
-            cursor++;
-        });
-      }
-      setTimeout(typeIt, ((60/tempoVal)*1000));
-    }
+    setTimeout(typeIt, ((60/tempoVal)*1000));
   }
+}
