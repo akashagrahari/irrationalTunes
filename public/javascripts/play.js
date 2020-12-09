@@ -13,7 +13,8 @@ document.addEventListener("DOMContentLoaded", (event) => {
         ac = new AudioContext();
         sfPromise = Soundfont.instrument(ac, 'acoustic_grand_piano', { gain: 4 });
         initializeVars();
-
+        hideIntro();
+        refresh();
     });
 });
 
